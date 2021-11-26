@@ -1,7 +1,7 @@
 -- Database: restaurant
 
--- DROP DATABASE "restaurant";
--- CREATE DATABASE "restaurant";
+DROP DATABASE IF EXISTS "restaurant";
+CREATE DATABASE "restaurant";
 
 -- Create tables
 
