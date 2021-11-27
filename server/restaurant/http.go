@@ -10,7 +10,7 @@ import (
 
 type ClientOrder struct {
 	Table int          `json:"table"`
-	Items []*OrderItem `json: "items"`
+	Items []*OrderItem `json:"items"`
 }
 
 // Channels HTTP handler.
