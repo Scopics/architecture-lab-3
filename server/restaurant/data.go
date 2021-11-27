@@ -2,6 +2,7 @@ package restaurant
 
 import (
 	"database/sql"
+	"time"
 )
 
 type MenuItem struct {
@@ -56,7 +57,8 @@ func (s *Store) GetMenu() ([]*MenuItem, error) {
 }
 
 func (s *Store) AddNewOrder(table int, items []*OrderItem) (*Order, error) {
-	orderRow := s.Db.QueryRow("INSERT INTO orders (\"table\") VALUES ($1) RETURNING id", table)
+	orderRow := s.Db.QueryRow("INSERT INTO orders (\"table\", date) VALUES ($1, $2) RETURNING id",
+		table, time.Now().Format("2006-01-02 15:04:05"))
 
 	var orderId int
 	err := orderRow.Scan(&orderId)
