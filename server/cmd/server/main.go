@@ -16,10 +16,10 @@ import (
 const defaultPort = 8000
 
 func NewDbConnection() (*sql.DB, error) {
-	host, _ := os.LookupEnv("HOST")
-	port, _ := os.LookupEnv("PORT")
-	user, _ := os.LookupEnv("USER")
-	password, _ := os.LookupEnv("PASSWORD")
+	host, _ := os.LookupEnv("HOST_DB")
+	port, _ := os.LookupEnv("PORT_DB")
+	user, _ := os.LookupEnv("USER_DB")
+	password, _ := os.LookupEnv("PASSWORD_DB")
 
 	connection := &db.Connection{
 		Host:     host,
