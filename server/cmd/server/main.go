@@ -2,15 +2,17 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"os/signal"
 	"strings"
 )
 
+const defaultPort = 8000
+
 func inputLoop(quit chan string) {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("Restaurant DBMS server running")
 	fmt.Println("Enter q to quit")
 	for {
 		fmt.Print("-> ")
@@ -30,9 +32,15 @@ func interrruptLoop(quit chan string) {
 }
 
 func main() {
+	port := flag.Int("port", defaultPort, "Specify a http port")
+	flag.Parse()
+
+	fmt.Printf("Restaurant DBMS server running on port %d\n", *port)
+
 	quit := make(chan string)
 	go inputLoop(quit)
 	go interrruptLoop(quit)
+
 	quitMessage := <-quit
 	fmt.Println("Stopping server...")
 	fmt.Println(quitMessage)
