@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"strings"
@@ -13,7 +15,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const defaultPort = 8000
+const defaultPort = 8080
 
 func NewDbConnection() (*sql.DB, error) {
 	host, _ := os.LookupEnv("HOST_DB")
@@ -58,16 +60,36 @@ func init() {
 }
 
 func main() {
-	port := flag.Int("port", defaultPort, "Specify a http port")
+	var port int
+	flag.IntVar(&port, "port", defaultPort, "Specify a http port")
+	flag.IntVar(&port, "p", defaultPort, "Specify a http port (shorthand)")
 	flag.Parse()
 
-	fmt.Printf("Restaurant DBMS server running on port %d\n", *port)
+	if server, err := ComposeApiServer(port); err == nil {
+		fmt.Printf("Restaurant DBMS server running on port %d\n", port)
+		go func() {
+			err := server.Start()
+			if err == http.ErrServerClosed {
+				log.Printf("Server stopped")
+			} else {
+				log.Fatalf("Cannot start HTTP server: %s", err)
+			}
 
-	quit := make(chan string)
-	go inputLoop(quit)
-	go interrruptLoop(quit)
+		}()
 
-	quitMessage := <-quit
-	fmt.Println("Stopping server...")
-	fmt.Println(quitMessage)
+		quit := make(chan string)
+		go inputLoop(quit)
+		go interrruptLoop(quit)
+
+		quitMessage := <-quit
+
+		if err := server.Stop(); err != nil && err != http.ErrServerClosed {
+			log.Printf("Error stopping the server: %s", err)
+		} else {
+			fmt.Println(quitMessage)
+		}
+	} else {
+		log.Fatalf("Cannot initialize server: %s", err)
+	}
+
 }
