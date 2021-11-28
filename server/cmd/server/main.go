@@ -15,7 +15,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const defaultPort = 8000
+const defaultPort = 8080
 
 func NewDbConnection() (*sql.DB, error) {
 	host, _ := os.LookupEnv("HOST_DB")
