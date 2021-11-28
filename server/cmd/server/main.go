@@ -60,11 +60,13 @@ func init() {
 }
 
 func main() {
-	port := flag.Int("port", defaultPort, "Specify a http port")
+	var port int
+	flag.IntVar(&port, "port", defaultPort, "Specify a http port")
+	flag.IntVar(&port, "p", defaultPort, "Specify a http port (shorthand)")
 	flag.Parse()
 
-	if server, err := ComposeApiServer(*port); err == nil {
-		fmt.Printf("Restaurant DBMS server running on port %d\n", *port)
+	if server, err := ComposeApiServer(port); err == nil {
+		fmt.Printf("Restaurant DBMS server running on port %d\n", port)
 		go func() {
 			err := server.Start()
 			if err == http.ErrServerClosed {
