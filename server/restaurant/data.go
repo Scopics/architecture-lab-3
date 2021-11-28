@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+const dateFormat = "2006-01-02 15:04:05"
+
 type MenuItem struct {
 	Id    int64  `json:"id"`
 	Name  string `json:"name"`
@@ -58,7 +60,7 @@ func (s *Store) GetMenu() ([]*MenuItem, error) {
 
 func (s *Store) AddNewOrder(table int, items []*OrderItem) (*Order, error) {
 	orderRow := s.Db.QueryRow("INSERT INTO orders (\"table\", date) VALUES ($1, $2) RETURNING id",
-		table, time.Now().Format("2006-01-02 15:04:05"))
+		table, time.Now().Format(dateFormat))
 
 	var orderId int
 	err := orderRow.Scan(&orderId)
@@ -71,11 +73,14 @@ func (s *Store) AddNewOrder(table int, items []*OrderItem) (*Order, error) {
 	}
 
 	var totalPrice, totalPriceWithoutTax, recommendedTip float64
-	s.Db.QueryRow("SELECT * FROM get_total_price($1)", orderId).Scan(&orderId, &totalPrice, &totalPriceWithoutTax, &recommendedTip)
+	var date time.Time
+	s.Db.QueryRow("SELECT * FROM get_total_price($1)", orderId).Scan(
+		&orderId, &date, &totalPrice, &totalPriceWithoutTax, &recommendedTip)
 
 	order := &Order{
 		Id:                   orderId,
 		Table:                table,
+		Date:                 date.Format(dateFormat),
 		TotalPrice:           totalPrice,
 		TotalPriceWithoutTax: totalPriceWithoutTax,
 		RecommendedTip:       recommendedTip,

@@ -78,18 +78,18 @@ $$
 $$; 
 
 CREATE OR REPLACE FUNCTION get_total_price(ord_id INT) 
-RETURNS TABLE (order_id INT, total_price BIGINT, total_price_without_tax NUMERIC, recommended_tips NUMERIC)
+RETURNS TABLE (order_id INT, date timestamp, total_price BIGINT, total_price_without_tax NUMERIC, recommended_tips NUMERIC)
 LANGUAGE SQL   
 AS   
 $$  
-    SELECT od.order_id, 
+    SELECT od.order_id, o.date, 
 	SUM(m.price * od.quantity) AS total_price, 
 	SUM(m.price * od.quantity) * (1 - get_constant('tax')) AS total_price_without_tax,
 	SUM(m.price * od.quantity) * get_constant('tip') AS recommended_tips
 FROM order_details od
 JOIN menu m ON m.id = od.meal_id
 JOIN orders o ON o.id = od.order_id
-GROUP BY od.order_id
-HAVING od.order_id = ord_id;  
-$$; 
+GROUP BY od.order_id, o.id
+HAVING od.order_id = ord_id;
+$$;
 
