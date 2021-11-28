@@ -9,8 +9,8 @@ import (
 )
 
 type APIServer struct {
-	port    int
-	handler restaurant.HttpHandlerFunc
+	Port    int
+	Handler restaurant.HttpHandlerFunc
 	server  *http.Server
 }
 
@@ -18,11 +18,11 @@ func (s *APIServer) Start() error {
 	handler := new(http.ServeMux)
 
 	s.server = &http.Server{
-		Addr:    fmt.Sprintf(":%d", s.port),
+		Addr:    fmt.Sprintf(":%d", s.Port),
 		Handler: handler,
 	}
 
-	handler.HandleFunc("/restaurant", s.handler)
+	handler.HandleFunc("/restaurant", s.Handler)
 	return s.server.ListenAndServe()
 }
 
