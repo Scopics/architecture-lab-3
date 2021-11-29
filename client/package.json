@@ -5,6 +5,9 @@
     "type": "git",
     "url": "git+https://github.com/Scopics/architecture-lab-3.git"
   },
+  "scripts": {
+    "start": "ts-node --project tsconfig.json example.ts"
+  },
   "keywords": [
     "sdk"
   ],
