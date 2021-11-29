@@ -1,6 +1,5 @@
 import { fetch } from './fetch';
 
-
 export interface ClientConfig {
   baseUrl: string,
 }
