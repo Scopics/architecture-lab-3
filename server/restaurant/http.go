@@ -40,7 +40,7 @@ func handleGetMenu(rw http.ResponseWriter, store *Store) {
 func handleAddNewOrder(r *http.Request, rw http.ResponseWriter, store *Store) {
 	var clientOrder *ClientOrder
 	if err := json.NewDecoder(r.Body).Decode(&clientOrder); err != nil {
-		log.Printf("decoding json caused an error: %s", err)
+		log.Printf("Decoding json caused an error: %s", err)
 		tools.SendJsonBadRequest(rw, "Unable to render JSON")
 		return
 	}
@@ -49,7 +49,7 @@ func handleAddNewOrder(r *http.Request, rw http.ResponseWriter, store *Store) {
 	if err == nil {
 		tools.SendJsonOk(rw, resOrder)
 	} else {
-		log.Printf("error writing data to the database: %s", err)
+		log.Printf("Error writing data to the database: %s", err)
 		tools.SendJsonInternalError(rw)
 	}
 }
