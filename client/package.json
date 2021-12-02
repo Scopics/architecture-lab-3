@@ -6,7 +6,7 @@
     "url": "git+https://github.com/Scopics/architecture-lab-3.git"
   },
   "scripts": {
-    "start": "ts-node --project tsconfig.json example.ts"
+    "start": "./node_modules/.bin/ts-node --project tsconfig.json example.ts"
   },
   "keywords": [
     "sdk"
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Scopics/architecture-lab-3/issues"
   },
-  "homepage": "https://github.com/Scopics/architecture-lab-3#readme"
+  "homepage": "https://github.com/Scopics/architecture-lab-3#readme",
+  "dependencies": {
+    "ts-node": "^10.4.0"
+  }
 }
