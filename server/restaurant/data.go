@@ -2,6 +2,7 @@ package restaurant
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 )
 
@@ -59,6 +60,11 @@ func (s *Store) GetMenu() ([]*MenuItem, error) {
 }
 
 func (s *Store) AddNewOrder(table int, items []*OrderItem) (*Order, error) {
+
+	if table <= 0 {
+		return nil, fmt.Errorf("invalid table number")
+	}
+
 	orderRow := s.Db.QueryRow("INSERT INTO orders (\"table\", date) VALUES ($1, $2) RETURNING id",
 		table, time.Now().Format(dateFormat))
 
@@ -69,6 +75,16 @@ func (s *Store) AddNewOrder(table int, items []*OrderItem) (*Order, error) {
 	}
 
 	for _, item := range items {
+
+		res := s.Db.QueryRow("SELECT id FROM menu WHERE id = $1", item.ItemId)
+		var itemId int
+		if err := res.Scan(&itemId); err != nil {
+			return nil, fmt.Errorf("invalid id of item: %d", item.ItemId)
+		}
+		if item.Quantity <= 0 {
+			return nil, fmt.Errorf("invalid quantity of item: %d", item.ItemId)
+		}
+
 		s.Db.QueryRow("INSERT INTO order_details (order_id, meal_id, quantity) VALUES ($1, $2, $3)", orderId, item.ItemId, item.Quantity)
 	}
 
