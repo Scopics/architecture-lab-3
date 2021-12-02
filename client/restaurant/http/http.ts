@@ -2,7 +2,7 @@ import { request, IncomingMessage, RequestOptions } from 'http';
 
 export type fetchMethod = 'GET' | 'PUT' | 'POST';
 
-export const fetch = async (reqUrl: string, method: fetchMethod = 'GET', data?: any) => {
+export const http = async (reqUrl: string, method: fetchMethod = 'GET', data?: any) => {
   const url = new URL(reqUrl);
 
   const options: RequestOptions = {

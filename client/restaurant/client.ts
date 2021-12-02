@@ -1,4 +1,4 @@
-import { fetch } from './fetch';
+import { client } from './http/client';
 
 export interface ClientConfig {
   baseUrl: string,
@@ -17,9 +17,10 @@ export interface Order {
 }
 
 export const Client = ({ baseUrl }: ClientConfig) => {
-  
+  const httpClient = client(baseUrl);
+
   return {
-    listMenu: () => fetch(baseUrl + '/restaurant'),
-    addNewOrder: (items: Order) => fetch(baseUrl + '/restaurant', 'POST', items),
+    listMenu: () => httpClient.get('/restaurant'),
+    addNewOrder: (items: Order) => httpClient.post('/restaurant', items),
   }
 }

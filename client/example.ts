@@ -1,4 +1,4 @@
-import { Client, ClientConfig, Order } from './release/client';
+import { Client, ClientConfig, Order } from './restaurant/client';
 
 (async () => {
   const clientConfig: ClientConfig = { baseUrl: 'http://localhost:8080' };
