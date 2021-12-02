@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "baseUrl": "./",
+    "incremental": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": true
+  }
+}
