@@ -13,10 +13,8 @@ type ClientOrder struct {
 	Items []*OrderItem `json:"items"`
 }
 
-// Channels HTTP handler.
 type HttpHandlerFunc http.HandlerFunc
 
-// HttpHandler creates a new instance of channels HTTP handler.
 func HttpHandler(store *Store) HttpHandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
@@ -44,7 +42,6 @@ func handleAddNewOrder(r *http.Request, rw http.ResponseWriter, store *Store) {
 	if err := json.NewDecoder(r.Body).Decode(&clientOrder); err != nil {
 		log.Printf("decoding json caused an error: %s", err)
 		tools.SendJsonBadRequest(rw, "Unable to render JSON")
-
 		return
 	}
 
