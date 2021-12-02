@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"database/sql"
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -35,9 +34,9 @@ func NewDbConnection() (*sql.DB, error) {
 
 func inputLoop(quit chan string) {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("Enter q to quit")
+	log.Println("Enter q to quit")
 	for {
-		fmt.Print("-> ")
+		log.Print("-> ")
 		text, _ := reader.ReadString('\n')
 		text = strings.TrimSpace(text)
 		if strings.Compare("q", text) == 0 {
@@ -55,7 +54,7 @@ func interrruptLoop(quit chan string) {
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		fmt.Print("No .env file found")
+		log.Print("No .env file found")
 	}
 }
 
@@ -66,7 +65,7 @@ func main() {
 	flag.Parse()
 
 	if server, err := ComposeApiServer(port); err == nil {
-		fmt.Printf("Restaurant DBMS server running on port %d\n", port)
+		log.Printf("Restaurant DBMS server running on port %d\n", port)
 		go func() {
 			err := server.Start()
 			if err == http.ErrServerClosed {
@@ -86,7 +85,7 @@ func main() {
 		if err := server.Stop(); err != nil && err != http.ErrServerClosed {
 			log.Printf("Error stopping the server: %s", err)
 		} else {
-			fmt.Println(quitMessage)
+			log.Println(quitMessage)
 		}
 	} else {
 		log.Fatalf("Cannot initialize server: %s", err)
