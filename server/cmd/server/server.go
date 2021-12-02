@@ -15,6 +15,13 @@ type APIServer struct {
 }
 
 func (s *APIServer) Start() error {
+	if s.Handler == nil {
+		return fmt.Errorf("http handler is undefined")
+	}
+	if s.Port == 0 {
+		return fmt.Errorf("port is not specified")
+	}
+
 	handler := new(http.ServeMux)
 
 	s.server = &http.Server{
