@@ -36,7 +36,6 @@ func inputLoop(quit chan string) {
 	reader := bufio.NewReader(os.Stdin)
 	log.Println("Enter q to quit")
 	for {
-		log.Print("-> ")
 		text, _ := reader.ReadString('\n')
 		text = strings.TrimSpace(text)
 		if strings.Compare("q", text) == 0 {
