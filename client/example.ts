@@ -4,11 +4,18 @@ import { Client, ClientConfig, Order } from './restaurant/client';
   const clientConfig: ClientConfig = { baseUrl: 'http://localhost:8080' };
   const client = Client(clientConfig);
 
-  // Get list of menu items 
-  const menu = await client.listMenu();
-  console.log(menu);
+  console.log('<-- Scenario 1 Get list of menu items -->');
+  try {
+    const menu = await client.listMenu();
+    console.log(menu);
+  } catch (err: any) {
+    console.log(`Unable to get list menu: ${err.message}`);
+  }
 
-  // Add new Order
+  console.log();
+
+  console.log('<-- Scenario 2 Add new Order -->');
+  try {
   const order: Order = {
     table: 10,
     items: [
@@ -19,5 +26,7 @@ import { Client, ClientConfig, Order } from './restaurant/client';
   };
   const newOrder = await client.addNewOrder(order);
   console.log(newOrder);
-
+  } catch (err: any) {
+    console.log(`Unable to post a new order: ${err.message}`);
+  }
 })()
