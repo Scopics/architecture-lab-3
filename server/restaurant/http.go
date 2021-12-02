@@ -33,26 +33,26 @@ func handleGetMenu(rw http.ResponseWriter, store *Store) {
 	res, err := store.GetMenu()
 	if err != nil {
 		log.Printf("Error in a database query: %s", err)
-		tools.WriteJsonInternalError(rw)
+		tools.SendJsonInternalError(rw)
 		return
 	}
-	tools.WriteJsonOk(rw, res)
+	tools.SendJsonOk(rw, res)
 }
 
 func handleAddNewOrder(r *http.Request, rw http.ResponseWriter, store *Store) {
 	var clientOrder *ClientOrder
 	if err := json.NewDecoder(r.Body).Decode(&clientOrder); err != nil {
 		log.Printf("decoding json caused an error: %s", err)
-		tools.WriteJsonBadRequest(rw, "Unable to render JSON")
+		tools.SendJsonBadRequest(rw, "Unable to render JSON")
 
 		return
 	}
 
 	resOrder, err := store.AddNewOrder(clientOrder.Table, clientOrder.Items)
 	if err == nil {
-		tools.WriteJsonOk(rw, resOrder)
+		tools.SendJsonOk(rw, resOrder)
 	} else {
 		log.Printf("error writing data to the database: %s", err)
-		tools.WriteJsonInternalError(rw)
+		tools.SendJsonInternalError(rw)
 	}
 }
